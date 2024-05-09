@@ -187,6 +187,14 @@ class Analytics with ClientMethods {
     log("Client has been reset", kind: LogFilterKind.debug);
   }
 
+  Future setAnonymousId({required String customAnonymousId}) async {
+    state.userInfo.setState(UserInfo(customAnonymousId));
+  }
+
+  Future getAnonymousId({required String customAnonymousId}) async {
+    return (await state.userInfo.state).anonymousId;
+  }
+
   @override
   Future flush() async {
     if (_destroyed) {
@@ -207,28 +215,28 @@ class Analytics with ClientMethods {
 
   @override
   Future track(String event, {Map<String, dynamic>? properties}) async {
-    await _process(TrackEvent(event, properties: properties ?? {}));
+    await process(TrackEvent(event, properties: properties ?? {}));
   }
 
   @override
   Future screen(String name, {Map<String, dynamic>? properties}) async {
     final event = ScreenEvent(name, properties: properties ?? {});
 
-    await _process(event);
+    await process(event);
   }
 
   @override
   Future identify({String? userId, UserTraits? userTraits}) async {
     final event = IdentifyEvent(userId: userId, traits: userTraits);
 
-    await _process(event);
+    await process(event);
   }
 
   @override
   Future group(String groupId, {GroupTraits? groupTraits}) async {
     final event = GroupEvent(groupId, traits: groupTraits);
 
-    await _process(event);
+    await process(event);
   }
 
   @override
@@ -237,7 +245,7 @@ class Analytics with ClientMethods {
     final event =
         AliasEvent(userInfo.userId ?? userInfo.anonymousId, userId: newUserId);
 
-    await _process(event);
+    await process(event);
   }
 
   Future init() async {
@@ -374,7 +382,7 @@ class Analytics with ClientMethods {
         : state.configuration.state.appStateStream!();
   }
 
-  Future _process(RawEvent event) async {
+  Future process(RawEvent event) async {
     applyRawEventData(event);
     if (state.isReady) {
       _flushPolicyExecuter.notify(event);

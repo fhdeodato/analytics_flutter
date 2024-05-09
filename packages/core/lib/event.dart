@@ -78,8 +78,13 @@ class DestinationMetadata {
 class TrackEvent extends RawEvent {
   String event;
   Map<String, dynamic>? properties;
+  UserTraits? traits;
 
-  TrackEvent(this.event, {this.properties}) : super(EventType.track);
+  TrackEvent(
+    this.event, {
+    this.properties,
+    this.traits,
+  }) : super(EventType.track);
 
   factory TrackEvent.fromJson(Map<String, dynamic> json) =>
       _$TrackEventFromJson(json);
@@ -130,8 +135,13 @@ class AliasEvent extends RawEvent {
 class ScreenEvent extends RawEvent {
   String name;
   Map<String, dynamic>? properties;
+  UserTraits? traits;
 
-  ScreenEvent(this.name, {this.properties}) : super(EventType.screen);
+  ScreenEvent(
+    this.name, {
+    this.properties,
+    this.traits,
+  }) : super(EventType.screen);
 
   factory ScreenEvent.fromJson(Map<String, dynamic> json) =>
       _$ScreenEventFromJson(json);

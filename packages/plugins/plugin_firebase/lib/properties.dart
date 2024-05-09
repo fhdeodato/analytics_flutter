@@ -25,13 +25,14 @@ dynamic itemsFromJson(dynamic items) {
 }
 
 String sanitizeEventName(String eventName) {
-  return eventName.replaceAll(RegExp(r'[^a-zA-Z0-9]'), '_');
+  return eventName.replaceAll(RegExp(r'[^a-zA-Z0-9]'), '_').toLowerCase();
 }
 
-Map<String, Object?> castParameterType(Map<String, Object?> properties) {
+Map<String, Object?> castParameterType(Map<String, Object?> properties,
+    {String? nullAsString}) {
   return properties.map((key, value) {
     if (value is String || value is num || value == null) {
-      return MapEntry(key, value);
+      return MapEntry(key, value ?? nullAsString);
     } else {
       return MapEntry(key, value.toString());
     }

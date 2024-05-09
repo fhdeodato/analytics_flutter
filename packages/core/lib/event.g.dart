@@ -42,6 +42,9 @@ TrackEvent _$TrackEventFromJson(Map<String, dynamic> json) => TrackEvent(
           ? null
           : Context.fromJson(json['context'] as Map<String, dynamic>)
       ..integrations = json['integrations'] as Map<String, dynamic>?
+      ..traits = json['traits'] == null
+          ? null
+          : UserTraits.fromJson(json['traits'] as Map<String, dynamic>)
       ..metadata = json['_metadata'] == null
           ? null
           : DestinationMetadata.fromJson(
@@ -58,6 +61,7 @@ Map<String, dynamic> _$TrackEventToJson(TrackEvent instance) =>
       '_metadata': instance.metadata?.toJson(),
       'event': instance.event,
       'properties': instance.properties,
+      'traits': instance.traits?.toJson(),
     };
 
 IdentifyEvent _$IdentifyEventFromJson(Map<String, dynamic> json) =>
@@ -163,6 +167,9 @@ ScreenEvent _$ScreenEventFromJson(Map<String, dynamic> json) => ScreenEvent(
           ? null
           : Context.fromJson(json['context'] as Map<String, dynamic>)
       ..integrations = json['integrations'] as Map<String, dynamic>?
+      ..traits = json['traits'] == null
+          ? null
+          : UserTraits.fromJson(json['traits'] as Map<String, dynamic>)
       ..metadata = json['_metadata'] == null
           ? null
           : DestinationMetadata.fromJson(
@@ -179,6 +186,7 @@ Map<String, dynamic> _$ScreenEventToJson(ScreenEvent instance) =>
       '_metadata': instance.metadata?.toJson(),
       'name': instance.name,
       'properties': instance.properties,
+      'traits': instance.traits?.toJson(),
     };
 
 UserTraits _$UserTraitsFromJson(Map<String, dynamic> json) => UserTraits(
@@ -228,6 +236,8 @@ Map<String, dynamic> _$UserTraitsToJson(UserTraits instance) {
   writeNotNull('firstName', instance.firstName);
   writeNotNull('gender', instance.gender);
   writeNotNull('id', instance.id);
+  writeNotNull('user_id',
+      instance.id != null ? int.parse(instance.id.toString()) : null);
   writeNotNull('lastName', instance.lastName);
   writeNotNull('name', instance.name);
   writeNotNull('phone', instance.phone);
