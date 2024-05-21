@@ -109,7 +109,8 @@ class FirebaseDestination extends DestinationPlugin {
           await FirebaseAnalytics.instance.logBeginCheckout(
             coupon: properties["coupon"]?.toString(),
             currency: properties["currency"]?.toString(),
-            items: properties["items"] as List<AnalyticsEventItemJson>,
+            items: items,
+            // items: properties["items"] as List<AnalyticsEventItemJson>,
             value: double.tryParse(properties["value"].toString()),
             parameters: castParameterType(properties, nullAsString: ""),
           );
@@ -118,7 +119,8 @@ class FirebaseDestination extends DestinationPlugin {
           await FirebaseAnalytics.instance.logViewPromotion(
             creativeName: properties["creativeName"]?.toString(),
             creativeSlot: properties["creativeSlot"]?.toString(),
-            items: properties["items"] as List<AnalyticsEventItemJson>,
+            items: items,
+            // items: properties["items"] as List<AnalyticsEventItemJson>,
             locationId: properties["locationdId"]?.toString(),
             promotionId: properties["promotionId"]?.toString(),
             promotionName: properties["promotionName"]?.toString(),
@@ -129,7 +131,8 @@ class FirebaseDestination extends DestinationPlugin {
           await FirebaseAnalytics.instance.logAddPaymentInfo(
             coupon: properties["coupon"]?.toString(),
             currency: properties["currency"]?.toString(),
-            items: properties["items"] as List<AnalyticsEventItemJson>,
+            items: items,
+            // items: properties["items"] as List<AnalyticsEventItemJson>,
             paymentType: properties["paymentType"]?.toString(),
             value: double.tryParse(properties["value"].toString()),
             parameters: castParameterType(properties, nullAsString: ""),
@@ -140,7 +143,8 @@ class FirebaseDestination extends DestinationPlugin {
             affiliation: properties["affiliation"]?.toString(),
             coupon: properties["coupon"]?.toString(),
             currency: properties["currency"]?.toString(),
-            items: properties["items"] as List<AnalyticsEventItemJson>,
+            items: items,
+            // items: properties["items"] as List<AnalyticsEventItemJson>,
             shipping: double.tryParse(properties["shipping"].toString()),
             tax: double.tryParse(properties["tax"].toString()),
             transactionId: properties["transactionId"]?.toString(),
@@ -153,7 +157,8 @@ class FirebaseDestination extends DestinationPlugin {
             affiliation: properties["affiliation"]?.toString(),
             coupon: properties["coupon"]?.toString(),
             currency: properties["currency"]?.toString(),
-            items: properties["items"] as List<AnalyticsEventItemJson>,
+            items: items,
+            // items: properties["items"] as List<AnalyticsEventItemJson>,
             shipping: double.tryParse(properties["shipping"].toString()),
             tax: double.tryParse(properties["tax"].toString()),
             transactionId: properties["transactionId"]?.toString(),
@@ -165,14 +170,16 @@ class FirebaseDestination extends DestinationPlugin {
           await FirebaseAnalytics.instance.logViewItemList(
             itemListId: properties["itemListId"]?.toString(),
             itemListName: properties["itemListName"]?.toString(),
-            items: properties["items"] as List<AnalyticsEventItemJson>,
+            items: items,
+            // items: properties["items"] as List<AnalyticsEventItemJson>,
             parameters: castParameterType(properties, nullAsString: ""),
           );
           break;
         case 'Product Added to Wishlist':
           await FirebaseAnalytics.instance.logAddToWishlist(
             currency: properties["currency"]?.toString(),
-            items: properties["items"] as List<AnalyticsEventItemJson>,
+            items: items,
+            // items: properties["items"] as List<AnalyticsEventItemJson>,
             value: double.tryParse(properties["value"].toString()),
             parameters: castParameterType(properties, nullAsString: ""),
           );
