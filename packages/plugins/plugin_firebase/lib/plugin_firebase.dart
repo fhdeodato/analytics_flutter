@@ -88,6 +88,8 @@ class FirebaseDestination extends DestinationPlugin {
       properties.remove("3DS");
     }
 
+    String currentCurrency = properties["currency"] != null ? properties["currency"].toString() : "USD";
+
     try {
       switch (event.event) {
         case 'Product Clicked':
@@ -103,7 +105,7 @@ class FirebaseDestination extends DestinationPlugin {
           break;
         case 'Product Viewed':
           await FirebaseAnalytics.instance.logViewItem(
-            currency: properties["currency"]?.toString(),
+            currency: currentCurrency,
             // items: event.properties == null ? null : [AnalyticsEventItemJson(event.properties!)],
             items: items,
             value: double.tryParse(properties["value"].toString()),
@@ -112,7 +114,7 @@ class FirebaseDestination extends DestinationPlugin {
           break;
         case 'Product Added':
           await FirebaseAnalytics.instance.logAddToCart(
-            currency: properties["currency"]?.toString(),
+            currency: currentCurrency,
             // items: event.properties == null ? null : [AnalyticsEventItemJson(event.properties!)],
             items: items,
             value: double.tryParse(properties["value"].toString()),
@@ -121,7 +123,7 @@ class FirebaseDestination extends DestinationPlugin {
           break;
         case 'Product Removed':
           await FirebaseAnalytics.instance.logRemoveFromCart(
-            currency: properties["currency"]?.toString(),
+            currency: currentCurrency,
             // items: event.properties == null ? null : [AnalyticsEventItemJson(event.properties!)],
             items: items,
             value: double.tryParse(properties["value"].toString()),
@@ -131,7 +133,7 @@ class FirebaseDestination extends DestinationPlugin {
         case 'Checkout Started':
           await FirebaseAnalytics.instance.logBeginCheckout(
             coupon: properties["coupon"]?.toString(),
-            currency: properties["currency"]?.toString(),
+            currency: currentCurrency,
             items: items,
             // items: properties["items"] as List<AnalyticsEventItemJson>,
             value: double.tryParse(properties["value"].toString()),
@@ -153,7 +155,7 @@ class FirebaseDestination extends DestinationPlugin {
         case 'Payment Info Entered':
           await FirebaseAnalytics.instance.logAddPaymentInfo(
             coupon: properties["coupon"]?.toString(),
-            currency: properties["currency"]?.toString(),
+            currency: currentCurrency,
             items: items,
             // items: properties["items"] as List<AnalyticsEventItemJson>,
             paymentType: properties["paymentType"]?.toString(),
@@ -165,7 +167,7 @@ class FirebaseDestination extends DestinationPlugin {
           await FirebaseAnalytics.instance.logPurchase(
             affiliation: properties["affiliation"]?.toString(),
             coupon: properties["coupon"]?.toString(),
-            currency: properties["currency"]?.toString(),
+            currency: currentCurrency,
             items: items,
             // items: properties["items"] as List<AnalyticsEventItemJson>,
             shipping: double.tryParse(properties["shipping"].toString()),
@@ -179,7 +181,7 @@ class FirebaseDestination extends DestinationPlugin {
           await FirebaseAnalytics.instance.logRefund(
             affiliation: properties["affiliation"]?.toString(),
             coupon: properties["coupon"]?.toString(),
-            currency: properties["currency"]?.toString(),
+            currency: currentCurrency,
             items: items,
             // items: properties["items"] as List<AnalyticsEventItemJson>,
             shipping: double.tryParse(properties["shipping"].toString()),
@@ -200,7 +202,7 @@ class FirebaseDestination extends DestinationPlugin {
           break;
         case 'Product Added to Wishlist':
           await FirebaseAnalytics.instance.logAddToWishlist(
-            currency: properties["currency"]?.toString(),
+            currency: currentCurrency,
             items: items,
             // items: properties["items"] as List<AnalyticsEventItemJson>,
             value: double.tryParse(properties["value"].toString()),
@@ -277,7 +279,7 @@ class FirebaseDestination extends DestinationPlugin {
     // lets check if there is a title inside the event.properties
     String name = event.properties?["title"] ?? event.name;
     String section = event.properties?["site_section"] ?? event.name;
-    FirebaseAnalytics.instance.logScreenView(screenClass: event.name, screenName: event.name);
+    FirebaseAnalytics.instance.logScreenView(screenClass: name, screenName: section);
     return event;
   }
 
