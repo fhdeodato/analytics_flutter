@@ -8,9 +8,11 @@ import 'package:segment_analytics/plugin.dart';
 import 'package:segment_analytics/map_transform.dart';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_core/firebase_core.dart' show FirebaseOptions, Firebase;
+import 'package:firebase_core/firebase_core.dart'
+    show FirebaseOptions, Firebase;
 
-export 'package:firebase_core/firebase_core.dart' show FirebaseOptions, Firebase;
+export 'package:firebase_core/firebase_core.dart'
+    show FirebaseOptions, Firebase;
 
 import 'package:segment_analytics_plugin_firebase/properties.dart';
 
@@ -33,7 +35,8 @@ class FirebaseDestination extends DestinationPlugin {
     }
     if (event.traits != null) {
       await Future.wait(event.traits!.toJson().entries.map((entry) async {
-        await FirebaseAnalytics.instance.setUserProperty(name: entry.key, value: entry.value.toString());
+        await FirebaseAnalytics.instance
+            .setUserProperty(name: entry.key, value: entry.value.toString());
       }));
     }
     return event;
@@ -54,27 +57,41 @@ class FirebaseDestination extends DestinationPlugin {
       for (var newItem in properties["items"] as List<dynamic>) {
         index++;
         items.add(AnalyticsEventItemJson(<String, dynamic>{
-          if (newItem['product_id'] != null) 'itemId': newItem['product_id'].toString(),
+          if (newItem['product_id'] != null)
+            'itemId': newItem['product_id'].toString(),
           if (newItem['name'] != null) 'itemName': newItem['name'].toString(),
           // if (newItem['brand'] != null) 'affiliation': newItem['brand'].toString(),
           'affiliation': '',
           // if (newItem['discount_tier'] != null) 'coupon': newItem['discount_tier'].toString(),
           'coupon': '',
           if (newItem['product_discount_amount'] != null)
-            'discount': double.tryParse(newItem['product_discount_amount'].toString()),
+            'discount':
+                double.tryParse(newItem['product_discount_amount'].toString()),
           'index': index,
-          if (newItem['brand'] != null) 'itemBrand': newItem['brand'].toString(),
-          if (newItem['category'] != null) 'itemCategory': newItem['category'].toString(),
-          if (newItem['product_subcategory'] != null) 'itemCategory2': newItem['product_subcategory'].toString(),
-          if (newItem['condition'] != null) 'itemCategory3': newItem['condition'].toString(),
-          if (newItem['color'] != null) 'itemCategory4': newItem['color'].toString(),
-          if (newItem['product_subcategory'] != null) 'itemCategory5': newItem['product_subcategory'].toString(),
-          if (newItem['product_id'] != null) 'itemListId': newItem['product_id'].toString(),
-          if (newItem['brand'] != null) 'itemListName': newItem['brand'].toString(),
-          if (newItem['material'] != null) 'itemVariant': newItem['material'].toString(),
-          if (newItem['product_id'] != null) 'locationId': newItem['product_id'].toString(),
-          if (newItem['price'] != null) 'price': double.tryParse(newItem['price'].toString()),
-          if (newItem['quantity'] != null) 'quantity': int.tryParse(newItem['quantity'].toString()),
+          if (newItem['brand'] != null)
+            'itemBrand': newItem['brand'].toString(),
+          if (newItem['category'] != null)
+            'itemCategory': newItem['category'].toString(),
+          if (newItem['product_subcategory'] != null)
+            'itemCategory2': newItem['product_subcategory'].toString(),
+          if (newItem['condition'] != null)
+            'itemCategory3': newItem['condition'].toString(),
+          if (newItem['color'] != null)
+            'itemCategory4': newItem['color'].toString(),
+          if (newItem['product_subcategory'] != null)
+            'itemCategory5': newItem['product_subcategory'].toString(),
+          if (newItem['product_id'] != null)
+            'itemListId': newItem['product_id'].toString(),
+          if (newItem['brand'] != null)
+            'itemListName': newItem['brand'].toString(),
+          if (newItem['material'] != null)
+            'itemVariant': newItem['material'].toString(),
+          if (newItem['product_id'] != null)
+            'locationId': newItem['product_id'].toString(),
+          if (newItem['price'] != null)
+            'price': double.tryParse(newItem['price'].toString()),
+          if (newItem['quantity'] != null)
+            'quantity': int.tryParse(newItem['quantity'].toString()),
           'parameters': newItem
         }));
       }
@@ -88,7 +105,9 @@ class FirebaseDestination extends DestinationPlugin {
       properties.remove("3DS");
     }
 
-    String currentCurrency = properties["currency"] != null ? properties["currency"].toString() : "USD";
+    String currentCurrency = properties["currency"] != null
+        ? properties["currency"].toString()
+        : "USD";
 
     try {
       switch (event.event) {
@@ -124,10 +143,21 @@ class FirebaseDestination extends DestinationPlugin {
           );
           break;
         case 'Product Added':
+          // create the item to be sent correctly
+          AnalyticsEventItem productAdded = AnalyticsEventItem(
+            affiliation: properties["brand"].toString(),
+            currency: properties["currency"].toString(),
+            itemBrand: properties["brand"].toString(),
+            itemName: properties["itemName"].toString(),
+            itemCategory: properties["item_category"].toString(),
+            price: num.tryParse(properties["price"].toString()) ?? 0,
+            itemId: properties["itemId"].toString(),
+            quantity: 1,
+          );
           await FirebaseAnalytics.instance.logAddToCart(
             currency: currentCurrency,
             // items: event.properties == null ? null : [AnalyticsEventItemJson(event.properties!)],
-            items: items,
+            items: [productAdded],
             value: double.tryParse(properties["value"].toString()),
             parameters: castParameterType(properties, nullAsString: ""),
           );
@@ -221,10 +251,12 @@ class FirebaseDestination extends DestinationPlugin {
           );
           break;
         case 'Cart Shared':
-          if (event.properties == null || event.properties!['products'] == null) {
+          if (event.properties == null ||
+              event.properties!['products'] == null) {
             log("Error tracking event '${event.event}' for Firebase: products property must be a list of products");
           } else if (event.properties!['products'] is List) {
-            await Future.wait((event.properties!['products'] as List).map((product) async {
+            await Future.wait(
+                (event.properties!['products'] as List).map((product) async {
               final productProperties = mapProperties(product, mappings);
               if (productProperties.containsKey("contentType") &&
                   productProperties.containsKey("itemId") &&
@@ -265,8 +297,10 @@ class FirebaseDestination extends DestinationPlugin {
             searchTerm: properties["searchTerm"].toString(),
             destination: properties["destination"]?.toString(),
             endDate: properties["endDate"]?.toString(),
-            numberOfNights: int.tryParse(properties["numberOfNights"].toString()),
-            numberOfPassengers: int.tryParse(properties["numberOfPassengers"].toString()),
+            numberOfNights:
+                int.tryParse(properties["numberOfNights"].toString()),
+            numberOfPassengers:
+                int.tryParse(properties["numberOfPassengers"].toString()),
             numberOfRooms: int.tryParse(properties["numberOfRooms"].toString()),
             origin: properties["origin"]?.toString(),
             startDate: properties["startDate"]?.toString(),
@@ -276,7 +310,8 @@ class FirebaseDestination extends DestinationPlugin {
           break;
         default:
           await FirebaseAnalytics.instance.logEvent(
-              name: sanitizeEventName(event.event), parameters: castParameterType(properties, nullAsString: ""));
+              name: sanitizeEventName(event.event),
+              parameters: castParameterType(properties, nullAsString: ""));
           break;
       }
     } catch (error) {
@@ -290,7 +325,8 @@ class FirebaseDestination extends DestinationPlugin {
     // lets check if there is a title inside the event.properties
     String name = event.properties?["title"] ?? event.name;
     String section = event.properties?["site_section"] ?? event.name;
-    FirebaseAnalytics.instance.logScreenView(screenClass: name, screenName: section);
+    FirebaseAnalytics.instance
+        .logScreenView(screenClass: name, screenName: section);
     return event;
   }
 
