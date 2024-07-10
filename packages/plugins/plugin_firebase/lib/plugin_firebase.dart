@@ -134,10 +134,23 @@ class FirebaseDestination extends DestinationPlugin {
           );
           break;
         case 'Product Viewed':
+
+          // create the item to be sent correctly
+          AnalyticsEventItem productViewed = AnalyticsEventItem(
+            affiliation: properties["brand"].toString(),
+            currency: properties["currency"].toString(),
+            itemBrand: properties["brand"].toString(),
+            itemName: properties["itemName"].toString(),
+            itemCategory: properties["item_category"].toString(),
+            price: num.tryParse(properties["price"].toString()) ?? 0,
+            itemId: properties["itemId"].toString(),
+            quantity: 1,
+          );
+
           await FirebaseAnalytics.instance.logViewItem(
             currency: currentCurrency,
             // items: event.properties == null ? null : [AnalyticsEventItemJson(event.properties!)],
-            items: items,
+            items: [productViewed],
             value: double.tryParse(properties["value"].toString()),
             parameters: castParameterType(properties, nullAsString: ""),
           );
