@@ -17,11 +17,11 @@ dependencies:
     sdk: flutter
   json_annotation: ^4.8.0
   segment_analytics:
-    path: ../../core
-    # git:
-    #   url: https://github.com/fhdeodato/analytics_flutter
-    #   ref: main
-    #   path: packages/core
+#    path: ../../core
+     git:
+       url: https://github.com/fhdeodato/analytics_flutter
+       ref: main
+       path: packages/core
 
 dev_dependencies:
   build_runner: ^2.3.3
