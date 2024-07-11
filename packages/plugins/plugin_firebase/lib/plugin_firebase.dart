@@ -176,10 +176,21 @@ class FirebaseDestination extends DestinationPlugin {
           );
           break;
         case 'Product Removed':
+          AnalyticsEventItem productRemoved = AnalyticsEventItem(
+            affiliation: properties["brand"].toString(),
+            currency: properties["currency"].toString(),
+            itemBrand: properties["brand"].toString(),
+            itemName: properties["itemName"].toString(),
+            itemCategory: properties["item_category"].toString(),
+            price: num.tryParse(properties["price"].toString()) ?? 0,
+            itemId: properties["itemId"].toString(),
+            quantity: 1,
+          );
+
           await FirebaseAnalytics.instance.logRemoveFromCart(
             currency: currentCurrency,
             // items: event.properties == null ? null : [AnalyticsEventItemJson(event.properties!)],
-            items: items,
+            items: [productRemoved],
             value: double.tryParse(properties["value"].toString()),
             parameters: castParameterType(properties, nullAsString: ""),
           );
