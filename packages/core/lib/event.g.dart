@@ -184,8 +184,8 @@ ScreenEvent _$ScreenEventFromJson(Map<String, dynamic> json) => ScreenEvent(
           : DestinationMetadata.fromJson(
               json['_metadata'] as Map<String, dynamic>);
 
-Map<String, dynamic> _$ScreenEventToJson(ScreenEvent instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$ScreenEventToJson(ScreenEvent instance) {
+  Map<String, dynamic> data = {
       'anonymousId': instance.anonymousId,
       'messageId': instance.messageId,
       'userId': instance.userId,
@@ -195,8 +195,13 @@ Map<String, dynamic> _$ScreenEventToJson(ScreenEvent instance) =>
       '_metadata': instance.metadata?.toJson(),
       'name': instance.name,
       'properties': instance.properties,
-      'traits': instance.traits?.toJson(),
-    };
+  };
+
+  if (instance.traits != null) {
+    data.addAll({"traits": instance.traits?.toJson()});
+  }
+  return data;
+}
 
 UserTraits _$UserTraitsFromJson(Map<String, dynamic> json) => UserTraits(
       address: json['address'] == null
