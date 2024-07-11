@@ -30,39 +30,48 @@ Map<String, dynamic> _$DestinationMetadataToJson(
       'bundledIds': instance.bundledIds,
     };
 
-TrackEvent _$TrackEventFromJson(Map<String, dynamic> json) => TrackEvent(
-      json['event'] as String,
-      properties: json['properties'] as Map<String, dynamic>?,
-    )
-      ..anonymousId = json['anonymousId'] as String?
-      ..messageId = json['messageId'] as String?
-      ..userId = json['userId'] as String?
-      ..timestamp = json['timestamp'] as String?
-      ..context = json['context'] == null
-          ? null
-          : Context.fromJson(json['context'] as Map<String, dynamic>)
-      ..integrations = json['integrations'] as Map<String, dynamic>?
-      ..traits = json['traits'] == null
-          ? null
-          : UserTraits.fromJson(json['traits'] as Map<String, dynamic>)
-      ..metadata = json['_metadata'] == null
-          ? null
-          : DestinationMetadata.fromJson(
-              json['_metadata'] as Map<String, dynamic>);
+TrackEvent _$TrackEventFromJson(Map<String, dynamic> json) {
+  TrackEvent trackEvent = TrackEvent(
+    json['event'] as String,
+    properties: json['properties'] as Map<String, dynamic>?,
+  )
+    ..anonymousId = json['anonymousId'] as String?
+    ..messageId = json['messageId'] as String?
+    ..userId = json['userId'] as String?
+    ..timestamp = json['timestamp'] as String?
+    ..context = json['context'] == null
+        ? null
+        : Context.fromJson(json['context'] as Map<String, dynamic>)
+    ..integrations = json['integrations'] as Map<String, dynamic>?
+    ..metadata = json['_metadata'] == null
+        ? null
+        : DestinationMetadata.fromJson(
+            json['_metadata'] as Map<String, dynamic>);
+  if (json['traits'] != null) {
+    trackEvent.traits =
+        UserTraits.fromJson(json['traits'] as Map<String, dynamic>);
+  }
+  return trackEvent;
+}
 
-Map<String, dynamic> _$TrackEventToJson(TrackEvent instance) =>
-    <String, dynamic>{
-      'anonymousId': instance.anonymousId,
-      'messageId': instance.messageId,
-      'userId': instance.userId,
-      'timestamp': instance.timestamp,
-      'context': instance.context?.toJson(),
-      'integrations': instance.integrations,
-      '_metadata': instance.metadata?.toJson(),
-      'event': instance.event,
-      'properties': instance.properties,
-      'traits': instance.traits?.toJson(),
-    };
+Map<String, dynamic> _$TrackEventToJson(TrackEvent instance) {
+  Map<String, dynamic> data = {
+    'anonymousId': instance.anonymousId,
+    'messageId': instance.messageId,
+    'userId': instance.userId,
+    'timestamp': instance.timestamp,
+    'context': instance.context?.toJson(),
+    'integrations': instance.integrations,
+    '_metadata': instance.metadata?.toJson(),
+    'event': instance.event,
+    'properties': instance.properties,
+  };
+
+  if (instance.traits != null) {
+    data.addAll({"traits": instance.traits?.toJson()});
+  }
+  return data;
+}
 
 IdentifyEvent _$IdentifyEventFromJson(Map<String, dynamic> json) =>
     IdentifyEvent(
