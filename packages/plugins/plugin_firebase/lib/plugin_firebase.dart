@@ -59,7 +59,7 @@ class FirebaseDestination extends DestinationPlugin {
         items.add(AnalyticsEventItemJson(<String, dynamic>{
           if (newItem['product_id'] != null)
             'itemId': newItem['product_id'].toString(),
-          if (newItem['name'] != null) 'itemName': newItem['name'].toString(),
+          if (newItem['name'] != null) 'itemName': newItem['name'].toString().toLowerCase(),
           // if (newItem['brand'] != null) 'affiliation': newItem['brand'].toString(),
           'affiliation': '',
           // if (newItem['discount_tier'] != null) 'coupon': newItem['discount_tier'].toString(),
@@ -122,7 +122,7 @@ class FirebaseDestination extends DestinationPlugin {
           String name = (properties["name"] ??
                   properties["itemName"] ??
                   properties["itemId"])
-              .toString();
+              .toString().toLowerCase();
           AnalyticsEventItem analyticsEventItem = AnalyticsEventItem(
               itemName: name, itemId: properties['itemId'].toString());
 
@@ -140,7 +140,7 @@ class FirebaseDestination extends DestinationPlugin {
             affiliation: properties["brand"].toString(),
             currency: properties["currency"].toString(),
             itemBrand: properties["brand"].toString(),
-            itemName: properties["itemName"].toString(),
+            itemName: properties["itemName"].toString().toLowerCase(),
             itemCategory: properties["item_category"].toString(),
             price: num.tryParse(properties["price"].toString()) ?? 0,
             itemId: properties["itemId"].toString(),
@@ -161,7 +161,7 @@ class FirebaseDestination extends DestinationPlugin {
             affiliation: properties["brand"].toString(),
             currency: properties["currency"].toString(),
             itemBrand: properties["brand"].toString(),
-            itemName: properties["itemName"].toString(),
+            itemName: properties["itemName"].toString().toLowerCase(),
             itemCategory: properties["item_category"].toString(),
             price: num.tryParse(properties["price"].toString()) ?? 0,
             itemId: properties["itemId"].toString(),
@@ -180,7 +180,7 @@ class FirebaseDestination extends DestinationPlugin {
             affiliation: properties["brand"].toString(),
             currency: properties["currency"].toString(),
             itemBrand: properties["brand"].toString(),
-            itemName: properties["itemName"].toString(),
+            itemName: properties["itemName"].toString().toLowerCase(),
             itemCategory: properties["item_category"].toString(),
             price: num.tryParse(properties["price"].toString()) ?? 0,
             itemId: properties["itemId"].toString(),
