@@ -334,6 +334,14 @@ class FirebaseDestination extends DestinationPlugin {
             parameters: castParameterType(properties, nullAsString: ""),
           );
           break;
+        case 'Cart Viewed':
+          await FirebaseAnalytics.instance.logViewCart(
+            currency: currentCurrency,
+            value: sumPrices( properties["items"] as List<AnalyticsEventItemJson>),
+            items: properties["items"] as List<AnalyticsEventItemJson>,
+            parameters: castParameterType(properties, nullAsString: ""),
+          );
+          break;
         default:
           await FirebaseAnalytics.instance.logEvent(
               name: sanitizeEventName(event.event),
@@ -359,5 +367,12 @@ class FirebaseDestination extends DestinationPlugin {
   @override
   void reset() {
     FirebaseAnalytics.instance.resetAnalyticsData();
+  }
+
+  double sumPrices(List<AnalyticsEventItem>? itemList) {
+    if (itemList == null || itemList.isEmpty) return 0.0;
+    return itemList
+        .map((item) => double.tryParse(item.price.toString()) ?? 0.0)
+        .reduce((a, b) => a + b);
   }
 }
