@@ -112,7 +112,7 @@ You must pass at least the `writeKey`. Additional configuration options are list
 ### Client Options
 
 | Name                              | Default                       | Description                                                                                                                                                                                                                                                                     |
-| --------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| --------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | 
 | `writeKey` **(REQUIRED)**         | ''                            | Your Segment API key.                                                                                                                                                                                                                                                           |
 | `debug`                           | false                         | When set to false, it will not generate any info logs.                                                                                                                                                                                                                          |
 | `collectDeviceId`                 | false                         | Set to true to automatically collect the device ID from the DRM API on Android devices.                                                                                                                                                                                         |
@@ -124,9 +124,10 @@ You must pass at least the `writeKey`. Additional configuration options are list
 | `trackDeeplinks`                  | false                         | Enable automatic tracking for when the user opens the app via a deep link. \*NOTE: when sending this flag, the sdk plugin_appsflyer will ignore [onAppOpenAttribution](https://github.com/AppsFlyerSDK/appsflyer-flutter-plugin/blob/master/doc/Guides.md#Unified-deep-linking) |
 | `autoAddSegmentDestination`       | true                          | Set to false to skip adding the SegmentDestination plugin                                                                                                                                                                                                                       |
 | `defaultIntegrationSettings`      | null                          | Plugin settings that will be used if the request to get the settings from Segment fails.                                                                                                                                                                                        |
-| `maxBatchSize`                    | true                          | 100                                                                                                                                                                                                                                                                             | Maximum number of events to send to the API at once. |
+| `maxBatchSize`                    | true                          | 100 Maximum number of events to send to the API at once.                                                                                                                                                                                                                        |
 | `appStateStream`                  | null                          | Set to override the stream of application foreground or background events.                                                                                                                                                                                                      |
 | `requestFactory`                  | true                          | Set to override the factory to generate HTTP requests. Type: [RequestFactory](https://github.com/segmentio/analytics_flutter/blob/master/packages/core/lib/state.dart#L546)                                                                                                     |
+| `storageJson`                     | true                          | Enable or disable automatic the generation JSON files for the serialization library                                                                                                                                                                                             |
 
 ## Client methods
 
@@ -524,7 +525,7 @@ LogFactory.logger = CustomLogger();
 
 You can handle analytics client errors through the `errorHandler` option.
 
-The error handler configuration receives a function which will get called whenever an error happens on the analytics client. It will receive an Exception, that will extend one of the errors from [errors.dart](packages/core/lib/errors.dart).
+The error handler configuration receives a function which will get called whenever an error happens on the analytics client. It will receive an Exception, that will extend one of the errors from [errors.dart](./lib/errors.dart).
 
 You can use this error handling to trigger different behaviours in the client when a problem occurs. For example if the client gets rate limited you could use the error handler to swap flush policies to be less aggressive:
 
@@ -554,7 +555,7 @@ final analytics = createClient(Configuration(writeKey),
 
 ### Reporting errors from plugins
 
-Plugins can also report errors to the handler by using the [`.error`](packages/core/lib/analytics.dart#L52) function of the analytics client, we recommend using the `PluginError` for consistency, and attaching the `innerError` with the actual exception that was hit:
+Plugins can also report errors to the handler by using the [`.error`](./lib/analytics.dart#L55) function of the analytics client, we recommend using the `PluginError` for consistency, and attaching the `innerError` with the actual exception that was hit:
 
 ```dart
 import 'package:segment_analytics/errors.dart';
@@ -572,15 +573,15 @@ try {
 
 ## Example App
 
-See the [example app](./example/README.md) to check a full test app of how to integrate Analytics-Flutter into your own Flutter app.
+See the [example app](../../example/README.md) to check a full test app of how to integrate Analytics-Flutter into your own Flutter app.
 
 ## Contributing
 
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+See the [contributing guide](./CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
 
 ## Code of Conduct
 
-Before contributing, please also see our [code of conduct](CODE_OF_CONDUCT.md).
+Before contributing, please also see our [code of conduct](../../CODE_OF_CONDUCT.md).
 
 ## License
 

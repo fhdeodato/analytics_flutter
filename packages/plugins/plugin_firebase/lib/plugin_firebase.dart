@@ -112,12 +112,11 @@ class FirebaseDestination extends DestinationPlugin {
     try {
       switch (event.event) {
         case 'Product Clicked':
-          if (!(properties.containsKey('list_id') &&
-              (properties.containsKey('name') ||
-                  properties.containsKey('itemName')) &&
-              properties.containsKey('itemId'))) {
-            throw Exception(
-                "Missing properties: list_name, list_id, name and itemID");
+          if (!(properties.containsKey('list_id') ||
+              properties.containsKey('list_name') || 
+              properties.containsKey('name') ||
+              properties.containsKey('itemId')) ) {
+            throw Exception("Missing properties: list_name, list_id, name and itemID");
           }
           String name = (properties["name"] ??
                   properties["itemName"] ??
@@ -126,11 +125,14 @@ class FirebaseDestination extends DestinationPlugin {
           AnalyticsEventItem analyticsEventItem = AnalyticsEventItem(
               itemName: name, itemId: properties['itemId'].toString());
 
+          AnalyticsEventItem itemClicked = AnalyticsEventItem(
+                              itemName: properties['name'].toString(), 
+                              itemId: properties['itemId'].toString());
+
           await FirebaseAnalytics.instance.logSelectItem(
-            itemListName:
-                (properties['list_name'] ?? properties['list_id']).toString(),
-            itemListId: properties['list_id'].toString(),
-            items: [analyticsEventItem],
+              itemListName: properties['list_name'].toString(),
+              itemListId: properties['list_id'].toString(),
+              items:[itemClicked],
           );
           break;
         case 'Product Viewed':

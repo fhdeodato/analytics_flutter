@@ -28,11 +28,11 @@ class StateManager {
   final DeepLinkDataState deepLinkData;
   final UserInfoState userInfo;
 
-  void init(ErrorHandler errorHandler) {
-    filters.init(errorHandler);
-    deepLinkData.init(errorHandler);
-    userInfo.init(errorHandler);
-    context.init(errorHandler);
+  void init(ErrorHandler errorHandler, bool storageJson) {
+    filters.init(errorHandler, storageJson);
+    deepLinkData.init(errorHandler, storageJson);
+    userInfo.init(errorHandler, storageJson);
+    context.init(errorHandler, storageJson);
   }
 
   StateManager(Store store, System system, Configuration configuration)
@@ -159,15 +159,17 @@ abstract class PersistedState<T> implements AsyncStateNotifier<T> {
     }
   }
 
-  void init(ErrorHandler errorHandler) {
+  void init(ErrorHandler errorHandler, bool storageJson) {
     this._errorHandler = errorHandler;
     addListener((state) {
       if (_persistance != null) {
         _hasUpdated = true;
       } else {
-        _persistance = _store
-            .setPersisted(_key, toJson(state))
-            .whenComplete(_whenPersistenceComplete);
+        _persistance = storageJson 
+            ? _store
+              .setPersisted(_key, toJson(state))
+              .whenComplete(_whenPersistenceComplete) 
+            : null;
       }
     });
     _store.ready.then<void>((_) async {
@@ -176,9 +178,11 @@ abstract class PersistedState<T> implements AsyncStateNotifier<T> {
 
       if (rawV == null) {
         final init = await _initialiser();
-        _persistance = _store
-            .setPersisted(_key, toJson(init))
-            .whenComplete(_whenPersistenceComplete);
+        _persistance = storageJson 
+            ? _store
+              .setPersisted(_key, toJson(init))
+              .whenComplete(_whenPersistenceComplete) 
+            : null;
         _notifier.nonNullState = init;
         v = init;
       } else {
@@ -197,15 +201,16 @@ abstract class PersistedState<T> implements AsyncStateNotifier<T> {
       return;
     }).catchError((e) {
       _error = e;
-      if (_error.toString().contains("FormatException")) {
+      // Clean file if exist a format error
+      if(_error.toString().contains("FormatException")) {
         _store.setPersisted(_key, {});
-        log("Clean file $_key with format error", kind: LogFilterKind.warning);
+        log("Clean file $_key with format error",
+          kind: LogFilterKind.warning);
       } else {
         final wrappedError = ErrorLoadingStorage(e);
         errorHandler(wrappedError);
         throw wrappedError;
       }
-
     });
   }
 
@@ -528,6 +533,9 @@ class Configuration {
   final RequestFactory? requestFactory;
   final StreamSubscription<AppStatus> Function()? appStateStream;
   final ErrorHandler? errorHandler;
+  final bool? storageJson;
+
+  final String? token;
 
   Configuration(this.writeKey,
       {this.apiHost,
@@ -542,7 +550,10 @@ class Configuration {
       this.trackApplicationLifecycleEvents = false,
       this.trackDeeplinks = false,
       this.debug = false,
-      this.maxBatchSize});
+      this.maxBatchSize,
+      this.storageJson = true,
+      this.token
+      });
 }
 
 typedef ErrorHandler = void Function(Exception);
@@ -561,5 +572,7 @@ Configuration setFlushPolicies(
       maxBatchSize: a.maxBatchSize,
       requestFactory: a.requestFactory,
       trackApplicationLifecycleEvents: a.trackApplicationLifecycleEvents,
-      trackDeeplinks: a.trackDeeplinks);
+      trackDeeplinks: a.trackDeeplinks,
+      storageJson: a.storageJson,
+      token: a.token);
 }
