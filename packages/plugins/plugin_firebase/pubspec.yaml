@@ -20,7 +20,7 @@ dependencies:
 #    path: ../../core
      git:
        url: https://github.com/fhdeodato/analytics_flutter
-       ref: mainwithchanges
+       ref: feature/update_firebase_core
        path: packages/core
 
 dev_dependencies:
