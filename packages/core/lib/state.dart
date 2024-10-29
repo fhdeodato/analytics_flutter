@@ -516,6 +516,7 @@ class Configuration {
 
   final bool collectDeviceId;
   final bool trackApplicationLifecycleEvents;
+  final bool trackPushNotifications;
   final bool trackDeeplinks;
   final List<FlushPolicy>? flushPolicies;
 
@@ -540,6 +541,7 @@ class Configuration {
       this.appStateStream,
       this.requestFactory,
       this.trackApplicationLifecycleEvents = false,
+      this.trackPushNotifications = false,
       this.trackDeeplinks = false,
       this.debug = false,
       this.maxBatchSize});
@@ -561,5 +563,6 @@ Configuration setFlushPolicies(
       maxBatchSize: a.maxBatchSize,
       requestFactory: a.requestFactory,
       trackApplicationLifecycleEvents: a.trackApplicationLifecycleEvents,
+      trackPushNotifications: a.trackPushNotifications,
       trackDeeplinks: a.trackDeeplinks);
 }
