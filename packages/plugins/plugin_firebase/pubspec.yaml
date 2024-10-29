@@ -1,6 +1,6 @@
 name: segment_analytics_plugin_firebase
 description: The hassle-free way to add Segment analytics to your Flutter app.
-version: 1.0.4
+version: 1.0.5
 homepage: https://github.com/segmentio/analytics_flutter#readme
 repository: https://github.com/segmentio/analytics_flutter/tree/main/packages/plugins/plugin_firebase#readme
 issue_tracker: https://github.com/segmentio/analytics_flutter/issues
@@ -12,7 +12,7 @@ environment:
 
 dependencies:
   firebase_analytics: ^10.1.0
-  firebase_core: ^2.7.0
+  firebase_core: ^3.6.0
   flutter:
     sdk: flutter
   json_annotation: ^4.8.0
